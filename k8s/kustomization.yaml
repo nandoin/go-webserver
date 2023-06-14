@@ -7,5 +7,5 @@ resources:
 namespace: go-webserver
 images:
 - name: image
-  newName: luizfernandomarques/go-webserver
-  newTag: v1
+  newName: luizfernadomarques/go-webserver
+  newTag: e635448d914f6e534617857a998e3c57629d0efe
