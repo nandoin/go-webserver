@@ -35,5 +35,5 @@ jobs:
         name: go-webserver
         namespace: go-webserver
         image: go-webserver:${{ github.sha }}
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.FULL_ACCESS_TOKEN }}
         version: ${{ github.sha }}
