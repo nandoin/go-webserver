@@ -1,0 +1,33 @@
+---
+name: "Deploy K8S PROD"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build docker image
+      run: docker build --file docker/Dockerfile --tag go-webserver:${{ github.sha }} .
+
+    - name: Checkout GitHub Action Repo
+      uses: actions/checkout@v2
+      with:
+        repository: nandoin/argocd
+        ref: main
+        #token: ${{ secrets.GIT_HUB_TOKEN }}
+        path: .github/argocd
+
+    - name: Deploy go-webserver
+      uses: ./.github/argocd/actions/deploy_kubernetes
+      with:         
+        environment: production
+        name: go-webserver
+        namespace: go-webserver
+        artifact_name: go-webserver
+        image: go-webserver:${{ github.sha }}
+        #github_token: ${{ secrets.GIT_HUB_TOKEN }}
+        type: server
