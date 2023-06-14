@@ -42,7 +42,7 @@ jobs:
 
       - name: commit
         run: |
-          git config --local user.email "deploy@kustomize.com"
+          git config --local user.email "nandoin@live.com"
           git config --local user.name "kustomize deploy"
           git commit -am "update image tag"
 
