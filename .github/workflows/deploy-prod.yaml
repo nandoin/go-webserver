@@ -10,8 +10,15 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Build docker image
-      run: docker build --file docker/Dockerfile --tag go-webserver:${{ github.sha }} .
+    # - name: Build docker image
+    #   run: docker build --file docker/Dockerfile --tag go-webserver:latest .
+    - name: build image and push to docker hub
+      uses: docker/build-push-action@v1.1.0
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        repository: ${{ secrets.DOCKER_USERNAME }}/go-webserver
+        tags: ${{ github.sha }}
 
     - name: Checkout GitHub Action Repo
       uses: actions/checkout@v2
@@ -27,7 +34,6 @@ jobs:
         environment: production
         name: go-webserver
         namespace: go-webserver
-        artifact_name: go-webserver
         image: go-webserver:${{ github.sha }}
         #github_token: ${{ secrets.GIT_HUB_TOKEN }}
-        type: server
+        version: ${{ github.sha }}
