@@ -19,6 +19,35 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: ${{ secrets.DOCKER_USERNAME }}/go-webserver
           tags: ${{ github.sha }}, latest
-          push: true
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up kustomize
+        uses: imranismail/setup-kustomize@v1
+        with:
+          kustomize-version: "3.8.7"
+
+      - name: update k8s 
+        run: |
+          cd k8s
+          kustomize edit set image image=${{ secrets.DOCKER_USERNAME }}/go-webserver:${{ github.sha }}
+          cat kustomization.yaml
+
+      - name: commit
+        run: |
+          git config --local user.email "deploy@kustomize.com"
+          git config --local user.name "kustomize deploy"
+          git commit -am "update image tag"
+
+      - name: push
+        uses: ad-m/github-push-action@master
+        
+
 
 

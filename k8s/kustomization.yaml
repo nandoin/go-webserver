@@ -7,5 +7,5 @@ resources:
 namespace: go-webserver
 images:
 - name: image
-  newName: 407910189591.dkr.ecr.us-east-1.amazonaws.com/go-webserver
+  newName: luizfernandomarques/go-webserver
   newTag: v1
