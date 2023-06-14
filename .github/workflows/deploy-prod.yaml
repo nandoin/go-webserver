@@ -19,7 +19,6 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: ${{ secrets.DOCKER_USERNAME }}/go-webserver
         tags: ${{ github.sha }}
-        path: docker/
 
     - name: Checkout GitHub Action Repo
       uses: actions/checkout@v2
