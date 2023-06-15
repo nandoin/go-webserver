@@ -1,5 +1,5 @@
 ---
-name: "Deploy K8S PROD"
+name: "Deploy K8S PROD Multiple"
 
 # on:
 #   workflow_dispatch:
