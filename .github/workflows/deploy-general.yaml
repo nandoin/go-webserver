@@ -1,13 +1,12 @@
 ---
-name: "Deploy K8S PROD Multiple"
+name: "Deploy K8S PROD General"
 
 on:
   workflow_dispatch:
-on:
-  workflow_dispatch:
-  push:
-      branches:
-            - main
+# on:
+#     push:
+#         branches:
+#             - main
 
 jobs:
   deploy:
@@ -22,7 +21,7 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        repository: ${{ secrets.DOCKER_USERNAME }}/api-gateway-fernando
+        repository: ${{ secrets.DOCKER_USERNAME }}/go-webserver
         tags: ${{ github.sha }}
 
     - name: Checkout GitHub Action Repo
@@ -33,11 +32,23 @@ jobs:
         #token: ${{ secrets.GIT_HUB_TOKEN }}
         path: .github/argocd
 
-    - name: Deploy api-gateway-fernando
-      uses: ./.github/argocd/actions/deploy_kubernetes_multiple
+        
+    - name: Deploy yy-gympass
+      uses: ./.github/argocd/actions/deploy_kubernetes
       with:         
         environment: production
-        name: api-gateway-fernando
-        image: api-gateway-fernando:${{ github.sha }}
+        name: yy-gympass
+        namespace: yy-gympass
+        image: go-webserver:${{ github.sha }}
+        github_token: ${{ secrets.SSH_KEY }}
+        version: ${{ github.sha }}
+
+    - name: Deploy yy-samsung
+      uses: ./.github/argocd/actions/deploy_kubernetes
+      with:         
+        environment: production
+        name: yy-samsung
+        namespace: go-samsung
+        image: go-webserver:${{ github.sha }}
         github_token: ${{ secrets.SSH_KEY }}
         version: ${{ github.sha }}
