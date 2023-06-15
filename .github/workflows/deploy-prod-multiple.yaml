@@ -1,12 +1,12 @@
 ---
 name: "Deploy K8S PROD"
 
-on:
-  workflow_dispatch:
 # on:
-#     push:
-#         branches:
-#             - main
+#   workflow_dispatch:
+on:
+    push:
+        branches:
+            - main
 
 jobs:
   deploy:
@@ -21,7 +21,7 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        repository: ${{ secrets.DOCKER_USERNAME }}/go-webserver
+        repository: ${{ secrets.DOCKER_USERNAME }}/api-gateway-fernando
         tags: ${{ github.sha }}
 
     - name: Checkout GitHub Action Repo
@@ -32,12 +32,11 @@ jobs:
         #token: ${{ secrets.GIT_HUB_TOKEN }}
         path: .github/argocd
 
-    - name: Deploy go-webserver
-      uses: ./.github/argocd/actions/deploy_kubernetes
+    - name: Deploy api-gateway-fernando
+      uses: ./.github/argocd/actions/deploy_kubernetes_multiple
       with:         
         environment: production
-        name: go-webserver
-        namespace: go-webserver
-        image: go-webserver:${{ github.sha }}
+        name: api-gateway-fernando
+        image: api-gateway-fernando:${{ github.sha }}
         github_token: ${{ secrets.SSH_KEY }}
         version: ${{ github.sha }}
